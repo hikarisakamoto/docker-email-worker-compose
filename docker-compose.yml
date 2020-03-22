@@ -1,0 +1,23 @@
+version: '3.7'
+volumes:
+  dados:
+services:
+  db:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: 'root' 
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      # Volume dos dados
+      - dados:/var/lib/postgresql/data
+      # Scripts
+      - ./scripts:/scripts
+      - ./scripts/init.sql:/docker-entryponst-initdb.d/init.sql
+    front-end:
+      image: nginx:1.13
+      volumes:
+        # Site
+        - ./web:/usr/share/nginx/html/
+      ports:
+        - 80:80
+
