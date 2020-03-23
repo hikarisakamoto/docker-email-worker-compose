@@ -13,19 +13,19 @@ services:
       # Scripts
       - ./scripts:/scripts
       - ./scripts/init.sql:/docker-entryponst-initdb.d/init.sql
-    front-end:
-      image: nginx:1.13
-      volumes:
-        # Site
-        - ./web:/usr/share/nginx/html/
-      ports:
-        - 80:80
-    app:
-      image: python:3.6
-      volumes:
-        # Aplicação
-        - ./app:/app
-      working_dir: /app
-      command: ./app.sh
-      ports:
-        -8080:8080
+  front-end:
+    image: nginx:1.13
+    volumes:
+      # Site
+      - ./web:/usr/share/nginx/html/
+      # Configuração do proxy reverso
+      - ./nginx/default.config:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+  app:
+    image: python:3.6
+    volumes:
+      # Aplicação
+       - ./app:/app
+    working_dir: /app
+    command: bash ./app.sh
